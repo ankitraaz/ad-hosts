@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Auto Ad Popup</title>
+  <title>Auto Ad Popup with Timer</title>
   <script>
     let countdown = 5;
     let countdownInterval;
+    let popupTimeout;
 
     function startCountdown() {
       const countdownText = document.getElementById("countdown");
@@ -13,16 +14,22 @@
 
       countdownInterval = setInterval(() => {
         countdown--;
-        if (countdown < 0) {
+        if (countdown <= 0) {
           clearInterval(countdownInterval);
-          window.open('https://www.profitableratecpm.com/fn3xxqqh1i?key=3397788e3459ded570cb326975f0f5c9', '_blank');
-        } else {
-          countdownText.textContent = `Ad will open in ${countdown} seconds...`;
         }
+        countdownText.textContent = `Ad will open in ${countdown} seconds...`;
       }, 1000);
+
+      popupTimeout = setTimeout(() => {
+        const a = document.createElement("a");
+        a.href = 'https://www.profitableratecpm.com/fn3xxqqh1i?key=3397788e3459ded570cb326975f0f5c9';
+        a.target = "_blank";
+        a.click();
+      }, 5000); // 5 seconds
     }
 
-    function cancelPopup() {
+    function cancelAdPopup() {
+      clearTimeout(popupTimeout);
       clearInterval(countdownInterval);
       document.getElementById("countdown").textContent = "Ad popup cancelled.";
     }
@@ -32,6 +39,6 @@
 </head>
 <body>
   <h2 id="countdown">Ad will open in 5 seconds...</h2>
-  <button onclick="cancelPopup()">Cancel Ad Popup</button>
+  <button onclick="cancelAdPopup()">Cancel Ad Popup</button>
 </body>
 </html>
