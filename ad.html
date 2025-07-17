@@ -1,32 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-  <title>Ad Popup</title>
+  <title>Auto Ad Popup</title>
   <script>
-    let adTimer;
+    let countdown = 5;
+    let countdownInterval;
 
-    window.onload = function () {
-      adTimer = setTimeout(function () {
-        window.open(
-          "https://www.profitableratecpm.com/fn3xxqqh1i?key=3397788e3459ded570cb326975f0f5c9",
-          "_blank"
-        );
-      }, 5000); // 5 second delay
-    };
+    function startCountdown() {
+      const countdownText = document.getElementById("countdown");
+      countdownText.textContent = `Ad will open in ${countdown} seconds...`;
 
-    function cancelAd() {
-      clearTimeout(adTimer);
-      document.getElementById("status").innerText = "Ad popup cancelled.";
-      document.getElementById("cancelBtn").style.display = "none";
+      countdownInterval = setInterval(() => {
+        countdown--;
+        if (countdown < 0) {
+          clearInterval(countdownInterval);
+          window.open('https://www.profitableratecpm.com/fn3xxqqh1i?key=3397788e3459ded570cb326975f0f5c9', '_blank');
+        } else {
+          countdownText.textContent = `Ad will open in ${countdown} seconds...`;
+        }
+      }, 1000);
     }
+
+    function cancelPopup() {
+      clearInterval(countdownInterval);
+      document.getElementById("countdown").textContent = "Ad popup cancelled.";
+    }
+
+    window.onload = startCountdown;
   </script>
 </head>
-
 <body>
-  <h2 id="status">Ad will open in 5 seconds...</h2>
-  <button id="cancelBtn" onclick="cancelAd()">Cancel Ad Popup</button>
+  <h2 id="countdown">Ad will open in 5 seconds...</h2>
+  <button onclick="cancelPopup()">Cancel Ad Popup</button>
 </body>
-
 </html>
