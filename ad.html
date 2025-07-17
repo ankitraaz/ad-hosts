@@ -1,77 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Random Auto Ad Popup</title>
+  <meta charset="UTF-8">
+  <title>Ad Hosting</title>
   <style>
     body {
+      margin: 0;
+      font-family: sans-serif;
       background-color: #f8f8f8;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
     }
-    .popup-box {
-      background: #555;
+    #adContainer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000000e0;
       color: white;
-      padding: 30px;
-      border-radius: 10px;
-      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
     }
-    button {
-      margin-top: 15px;
+    #skipButton {
+      margin-top: 20px;
       padding: 10px 20px;
       background: #ff4d4d;
-      color: white;
       border: none;
       border-radius: 5px;
+      color: white;
+      font-size: 16px;
       cursor: pointer;
+      display: none;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
     }
   </style>
-  <script>
-    let countdown = 5;
-    let interval;
-
-    const ads = [
-      'https://www.profitableratecpm.com/fn3xxqqh1i?key=3397788e3459ded570cb326975f0f5c9',
-      'https://www.profitableratecpm.com/xyz?key=another_random_key_123',
-      'https://www.profitableratecpm.com/abc?key=different_key_456'
-    ];
-
-    function getRandomAd() {
-      return ads[Math.floor(Math.random() * ads.length)];
-    }
-
-    function startAdCountdown() {
-      const countdownEl = document.getElementById('countdown');
-      countdownEl.textContent = `Ad will open in ${countdown} seconds...`;
-
-      interval = setInterval(() => {
-        countdown--;
-        if (countdown <= 0) {
-          clearInterval(interval);
-          window.open(getRandomAd(), '_blank');
-          countdownEl.textContent = "Ad opened.";
-        } else {
-          countdownEl.textContent = `Ad will open in ${countdown} seconds...`;
-        }
-      }, 1000);
-    }
-
-    function restartAd() {
-      clearInterval(interval);
-      countdown = 5;
-      startAdCountdown();
-    }
-
-    window.onload = startAdCountdown;
-  </script>
 </head>
 <body>
-  <div class="popup-box">
-    <h2 id="countdown">Ad will open in 5 seconds...</h2>
-    <button onclick="restartAd()">Restart Ad</button>
-  </div>
+
+<div id="adContainer">
+  <div id="adMessage">Your ad will end in <span id="timer">30</span> seconds...</div>
+  <button id="skipButton" onclick="endAd()">Skip Ad</button>
+</div>
+
+<iframe id="adFrame" src="" style="display: none;"></iframe>
+
+<script>
+  const adLink = "https://www.profitableratecpm.com/fn3xxqqh1i?key=3397788e3459ded570cb326975f0f5c9";
+  const timerElement = document.getElementById("timer");
+  const skipButton = document.getElementById("skipButton");
+  const adContainer = document.getElementById("adContainer");
+  const adFrame = document.getElementById("adFrame");
+
+  let timeLeft = 30;
+
+  const countdown = setInterval(() => {
+    timeLeft--;
+    timerElement.textContent = timeLeft;
+
+    if (timeLeft === 20) {
+      skipButton.style.display = "block"; // Show skip button after 10 sec
+    }
+
+    if (timeLeft === 0) {
+      clearInterval(countdown);
+      endAd();
+    }
+  }, 1000);
+
+  // Try loading ad in iframe
+  window.onload = () => {
+    adFrame.src = adLink;
+    adFrame.style.display = "block";
+  };
+
+  function endAd() {
+    adContainer.style.display = "none";
+    clearInterval(countdown);
+  }
+</script>
+
 </body>
 </html>
