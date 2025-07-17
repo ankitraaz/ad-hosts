@@ -1,82 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Random Ad Popup</title>
+  <meta charset="UTF-8" />
+  <title>Random Auto Ad Popup</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
-      background-image: url('https://source.unsplash.com/random/1920x1080');
-      background-size: cover;
-      color: white;
+      background-color: #f8f8f8;
       font-family: Arial, sans-serif;
-      text-align: center;
-      padding-top: 20%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
     .popup-box {
-      background: rgba(0, 0, 0, 0.6);
-      padding: 20px;
+      background: #555;
+      color: white;
+      padding: 30px;
       border-radius: 10px;
-      display: inline-block;
+      text-align: center;
     }
     button {
+      margin-top: 15px;
       padding: 10px 20px;
-      background: #ff4747;
+      background: #ff4d4d;
+      color: white;
       border: none;
       border-radius: 5px;
-      color: white;
       cursor: pointer;
-      margin-top: 15px;
     }
   </style>
   <script>
-    const adLinks = [
+    let countdown = 5;
+    let interval;
+
+    const ads = [
       'https://www.profitableratecpm.com/fn3xxqqh1i?key=3397788e3459ded570cb326975f0f5c9',
-      'https://www.profitableratecpm.com/ne22nnke3?key=18617cdf60764c06586eafb8eccbcd17',
-      'https://www.profitableratecpm.com/7x4t8f8zz?key=sample1234567890',
+      'https://www.profitableratecpm.com/xyz?key=another_random_key_123',
+      'https://www.profitableratecpm.com/abc?key=different_key_456'
     ];
 
-    let countdown = 5;
-    let popupWindow;
-
-    function getRandomAdLink() {
-      const index = Math.floor(Math.random() * adLinks.length);
-      return adLinks[index];
+    function getRandomAd() {
+      return ads[Math.floor(Math.random() * ads.length)];
     }
 
-    function startAdPopup() {
-      const countdownText = document.getElementById('countdown');
-      countdownText.textContent = `Ad will open in ${countdown} seconds...`;
+    function startAdCountdown() {
+      const countdownEl = document.getElementById('countdown');
+      countdownEl.textContent = `Ad will open in ${countdown} seconds...`;
 
-      const interval = setInterval(() => {
+      interval = setInterval(() => {
         countdown--;
-        countdownText.textContent = `Ad will open in ${countdown} seconds...`;
-
         if (countdown <= 0) {
           clearInterval(interval);
-
-          const adLink = getRandomAdLink();
-          popupWindow = window.open(adLink, '_blank');
-
-          // Auto-close ad after 30 sec
-          setTimeout(() => {
-            if (popupWindow && !popupWindow.closed) {
-              popupWindow.close();
-              countdownText.textContent = "Ad closed after 30 seconds.";
-            }
-          }, 30000);
+          window.open(getRandomAd(), '_blank');
+          countdownEl.textContent = "Ad opened.";
+        } else {
+          countdownEl.textContent = `Ad will open in ${countdown} seconds...`;
         }
       }, 1000);
     }
 
-    window.onload = startAdPopup;
+    function restartAd() {
+      clearInterval(interval);
+      countdown = 5;
+      startAdCountdown();
+    }
+
+    window.onload = startAdCountdown;
   </script>
 </head>
 <body>
   <div class="popup-box">
-    <h2 id="countdown">Preparing ad...</h2>
-    <button onclick="window.location.reload()">Restart Ad</button>
+    <h2 id="countdown">Ad will open in 5 seconds...</h2>
+    <button onclick="restartAd()">Restart Ad</button>
   </div>
 </body>
 </html>
